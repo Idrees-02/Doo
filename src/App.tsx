@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { getTriagedRequests } from './data';
 import { RequestCard } from './components/RequestCard';
 import './App.css';
