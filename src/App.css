@@ -162,6 +162,42 @@ body {
 .requests-section {
   display: flex; flex-direction: column; gap: 12px;
 }
+.requests-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.sort-toggle {
+  display: flex; align-items: center; gap: 6px;
+}
+.sort-label {
+  font-size: 11px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.6px;
+  margin-right: 2px;
+}
+.sort-btn {
+  font-size: 12px; font-weight: 600;
+  color: var(--text-muted);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.sort-btn:hover {
+  color: var(--text);
+  background: rgba(123,140,222,0.1);
+  border-color: rgba(123,140,222,0.3);
+}
+.sort-btn--active {
+  color: var(--accent-blue);
+  background: rgba(123,140,222,0.15);
+  border-color: rgba(123,140,222,0.5);
+}
 .requests-list {
   display: flex; flex-direction: column; gap: 12px;
 }
@@ -223,6 +259,17 @@ body {
   background: var(--surface2);
   border-radius: 4px;
   border: 1px solid var(--border);
+}
+.request-id-tag {
+  font-size: 10px; font-weight: 700;
+  font-family: 'Courier New', monospace;
+  color: var(--accent-blue);
+  background: rgba(123,140,222,0.1);
+  border: 1px solid rgba(123,140,222,0.25);
+  border-radius: 4px;
+  padding: 1px 7px;
+  letter-spacing: 0.5px;
+  margin-right: 4px;
 }
 
 .card-header-right {

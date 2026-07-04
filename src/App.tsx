@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { getTriagedRequests } from './data';
 import { RequestCard } from './components/RequestCard';
 import './App.css';
@@ -12,6 +12,32 @@ const SLOTS_REMAINING = 3;
 
 function App() {
   const [requests] = useState(() => getTriagedRequests());
+  const [sortMode, setSortMode] = useState<'priority' | 'time'>('priority');
+
+  // Parse "HH:MM AM/PM" → total minutes since midnight for comparison
+  function parseTime(ts: string): number {
+    const [time, period] = ts.split(' ');
+    let [h, m] = time.split(':').map(Number);
+    if (period === 'PM' && h !== 12) h += 12;
+    if (period === 'AM' && h === 12) h = 0;
+    return h * 60 + m;
+  }
+
+  const PRIORITY_ORDER = { HIGH: 0, MEDIUM: 1, LOW: 2 };
+
+  const sortedRequests = useMemo(() => {
+    const copy = [...requests];
+    if (sortMode === 'priority') {
+      return copy.sort(
+        (a, b) => PRIORITY_ORDER[a.decision.priority] - PRIORITY_ORDER[b.decision.priority]
+      );
+    } else {
+      // oldest (smallest time value) first
+      return copy.sort(
+        (a, b) => parseTime(a.request.timestamp) - parseTime(b.request.timestamp)
+      );
+    }
+  }, [requests, sortMode]);
 
   const highCount = requests.filter((r) => r.decision.priority === 'HIGH').length;
   const autoCount = requests.filter((r) => r.decision.action === 'AUTO_RESOLVE').length;
@@ -84,13 +110,27 @@ function App() {
         {/* ── Requests ────────────────────────────────────── */}
         <section className="requests-section">
           <div className="requests-header">
-            <h2 className="panel-title">
-              Incoming Requests
-              <span className="sorted-note">↑ sorted by priority</span>
-            </h2>
+            <h2 className="panel-title">Incoming Requests</h2>
+            <div className="sort-toggle">
+              <span className="sort-label">Sort by:</span>
+              <button
+                id="sort-priority-btn"
+                className={`sort-btn${sortMode === 'priority' ? ' sort-btn--active' : ''}`}
+                onClick={() => setSortMode('priority')}
+              >
+                ↑ Priority
+              </button>
+              <button
+                id="sort-time-btn"
+                className={`sort-btn${sortMode === 'time' ? ' sort-btn--active' : ''}`}
+                onClick={() => setSortMode('time')}
+              >
+                🕐 Time (oldest first)
+              </button>
+            </div>
           </div>
           <div className="requests-list">
-            {requests.map((item, i) => (
+            {sortedRequests.map((item, i) => (
               <RequestCard key={item.request.id} item={item} index={i} />
             ))}
           </div>

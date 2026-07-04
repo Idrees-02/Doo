@@ -80,6 +80,7 @@ export const RequestCard: React.FC<CardProps> = ({ item, index }) => {
               </span>
             </div>
             <div className="issue-label">
+              <span className="request-id-tag">{request.id}</span>
               <span className="channel-icon">{CHANNEL_ICON[request.channel]}</span>
               {request.issue}
               <span className="timestamp">{request.timestamp}</span>
